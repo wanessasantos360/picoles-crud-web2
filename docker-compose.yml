@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  postgres_db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "Postgres2024!" #senha
+    ports:
+      - "5432:5432"
+    volumes:
+      - .data:/var/lib/postgresql/data 
+    networks:
+      - postgres-compose-network
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "wanessa.ufpe2018@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "PgAdmin2019!"
+    ports:
+      - "81:80"
+    depends_on:
+      - postgres_db
+    networks:
+      - postgres-compose-network
+
+  application:
+    build: .
+    
+    ports:
+      - "80:80"
+    depends_on:
+      - postgres_db
+    networks:
+      - postgres-compose-network
+networks: 
+  postgres-compose-network:
+    driver: bridge
