@@ -1,15 +1,15 @@
 from typing import Optional, List
-from core.deps import get_session
+from core.deps import get_session, get_current_user
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-from models.models import Nota_Fiscal
+from models.models import Nota_Fiscal, Usuario
 from schemas.schemas import Nota_Fiscal_Schema
 
 router = APIRouter()
 
 @router.post('/add')
-def adicionar(nota_fiscal: Nota_Fiscal_Schema, db: Session = Depends(get_session)):
+def adicionar(nota_fiscal: Nota_Fiscal_Schema, db: Session = Depends(get_session), current_user: Usuario = Depends(get_current_user)):
     data = nota_fiscal.model_dump()
     model = Nota_Fiscal(**data)
 
@@ -19,7 +19,7 @@ def adicionar(nota_fiscal: Nota_Fiscal_Schema, db: Session = Depends(get_session
     return Response('Nota Fiscal Adicionada com sucesso.', status.HTTP_200_OK)
 
 @router.put('/edit/{id}')
-def editar(id: int, nota_fiscal: Nota_Fiscal_Schema, db: Session = Depends(get_session)):
+def editar(id: int, nota_fiscal: Nota_Fiscal_Schema, db: Session = Depends(get_session), current_user: Usuario = Depends(get_current_user)):
     data = nota_fiscal.model_dump()
     model_updated = Nota_Fiscal(**data)
 

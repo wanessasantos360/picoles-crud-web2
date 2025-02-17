@@ -1,9 +1,9 @@
 from typing import Optional, List
-from core.deps import get_session
+from core.deps import get_session, get_current_user
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-from models.models import Lote
+from models.models import Lote, Usuario
 from schemas.schemas import Lote_Schema
 
 router = APIRouter()
@@ -25,7 +25,7 @@ def obter_lote(id: int, db: Session = Depends(get_session)):
             raise HTTPException(status.HTTP_404_NOT_FOUND, detail='Lote não encontrado') 
         
 @router.post('/add')
-def adicionar(lote: Lote_Schema, db: Session = Depends(get_session)):
+def adicionar(lote: Lote_Schema, db: Session = Depends(get_session), current_user: Usuario = Depends(get_current_user)):
     data = lote.model_dump()
     model = Lote(**data)
 
@@ -35,7 +35,7 @@ def adicionar(lote: Lote_Schema, db: Session = Depends(get_session)):
     return Response('Lote Adicionado com sucesso.', status.HTTP_200_OK)
 
 @router.put('/edit/{id}')
-def editar(id: int, lote: Lote_Schema, db: Session = Depends(get_session)):
+def editar(id: int, lote: Lote_Schema, db: Session = Depends(get_session), current_user: Usuario = Depends(get_current_user)):
     data = lote.model_dump()
     model_updated = Lote(**data)
 

@@ -1,15 +1,15 @@
 from typing import Optional, List
-from core.deps import get_session
+from core.deps import get_session, get_current_user
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-from models.models import Tipo_embalagem
+from models.models import Tipo_embalagem, Usuario
 from schemas.schemas import Tipo_Embalagem_Schema
 
 router = APIRouter()
 
 @router.post('/add')
-def adicionar(tipo_embalagem: Tipo_Embalagem_Schema, db:Session = Depends(get_session)):
+def adicionar(tipo_embalagem: Tipo_Embalagem_Schema, db:Session = Depends(get_session), current_user: Usuario = Depends(get_current_user)):
     data = tipo_embalagem.model_dump()
     model = Tipo_embalagem(**data)
 
@@ -19,7 +19,7 @@ def adicionar(tipo_embalagem: Tipo_Embalagem_Schema, db:Session = Depends(get_se
     return Response('Tipo de embalagem adicionado com sucesso.', status.HTTP_200_OK)
 
 @router.put('/edit/{id}')
-def editar(id: int, tipo_embalagem: Tipo_Embalagem_Schema, db: Session = Depends(get_session)):
+def editar(id: int, tipo_embalagem: Tipo_Embalagem_Schema, db: Session = Depends(get_session), current_user: Usuario = Depends(get_current_user)):
     data = tipo_embalagem.model_dump()
     model = Tipo_embalagem(**data)
 

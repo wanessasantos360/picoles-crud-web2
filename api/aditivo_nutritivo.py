@@ -1,15 +1,15 @@
 from typing import Optional, List
-from core.deps import get_session
+from core.deps import get_session, get_current_user
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-from models.models import Aditivo_nutritivo
+from models.models import Aditivo_nutritivo, Usuario
 from schemas.schemas import Aditivo_Nutritivo_Schema
 
 router = APIRouter()
 
 @router.post('/add')
-def adicionar(aditivo_nutritivo: Aditivo_Nutritivo_Schema, db:Session = Depends(get_session)):
+def adicionar(aditivo_nutritivo: Aditivo_Nutritivo_Schema, db:Session = Depends(get_session), current_user: Usuario = Depends(get_current_user)):
     data = aditivo_nutritivo.model_dump() # Dict
     model = Aditivo_nutritivo(**data)
 
@@ -19,7 +19,7 @@ def adicionar(aditivo_nutritivo: Aditivo_Nutritivo_Schema, db:Session = Depends(
     return Response('Aditivo Nutritivo adicionado com sucesso.', status.HTTP_200_OK) 
     
 @router.put('/edit/{id}')
-def editar(id: int, aditivo_nutritivo: Aditivo_Nutritivo_Schema, db:Session = Depends(get_session)):
+def editar(id: int, aditivo_nutritivo: Aditivo_Nutritivo_Schema, db:Session = Depends(get_session), current_user: Usuario = Depends(get_current_user)):
     data = aditivo_nutritivo.model_dump()
     model = Aditivo_nutritivo(**data)
 

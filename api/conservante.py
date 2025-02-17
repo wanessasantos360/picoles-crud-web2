@@ -1,15 +1,19 @@
 from typing import Optional, List
-from core.deps import get_session
+from core.deps import get_session, get_current_user
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
-from models.models import Conservante
+from models.models import Conservante, Usuario
 from schemas.schemas import Conservante_Schema
 
 router = APIRouter()
 
 @router.post('/add')
-def adicionar(conservante: Conservante_Schema,db: Session = Depends(get_session)):
+def adicionar(
+    conservante: Conservante_Schema,
+    db: Session = Depends(get_session),
+    current_user: Usuario = Depends(get_current_user)):
+
     data = conservante.model_dump()
     model = Conservante(**data)
 
@@ -20,7 +24,7 @@ def adicionar(conservante: Conservante_Schema,db: Session = Depends(get_session)
 
 
 @router.put('/edit/{id}')
-def editar(id: int, conservante: Conservante_Schema, db: Session = Depends(get_session)):
+def editar(id: int, conservante: Conservante_Schema, db: Session = Depends(get_session), current_user: Usuario = Depends(get_current_user)):
     data = conservante.model_dump()
     model = Conservante(**data)
 
@@ -36,7 +40,7 @@ def editar(id: int, conservante: Conservante_Schema, db: Session = Depends(get_s
  
 
 @router.get('/get', response_model=List[Conservante_Schema])
-def listar_conservantes(db: Session = Depends(get_session)):
+def listar_conservantes(db: Session = Depends(get_session), current_user: Usuario = Depends(get_current_user)):
     with db as session:
         model_returned: List[Conservante] = session.query(Conservante).all()
         return model_returned

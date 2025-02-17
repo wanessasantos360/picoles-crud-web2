@@ -12,7 +12,12 @@ from api.lote import router as lote_router
 from api.nota_fiscal import router as nota_fiscal_router
 from api.picoles import router as picoles_router
 
+from api.usuario import router as usuario_router
+
 api_router = APIRouter()
+
+# Usuario
+api_router.include_router(usuario_router, prefix='/usuarios', tags=['Usuarios'])
 
 #Tabelas de Entidades PK e Atributos
 api_router.include_router(aditivo_router, prefix='/aditivo', tags=['Aditivo Nutritivo'])
