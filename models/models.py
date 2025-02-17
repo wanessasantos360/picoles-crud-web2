@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, BigInteger, DECIMAL, DateTime, String, ForeignKey
+from sqlalchemy import Table, Column, Integer, BigInteger, DECIMAL, DateTime, String, ForeignKey, Boolean
 from sqlalchemy import orm
 from core.settings import ModelBase
 from typing import List, Optional
@@ -236,3 +236,11 @@ class Nota_Fiscal(ModelBase):
     def __repr__(self):
         return f'Nota fiscal: {self.numero_serie}'
 
+class Usuario (ModelBase):
+    __tablename__ = 'usuarios'
+
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    username = Column(String(45), unique=True, nullable=False, index=True)
+    email = Column(String(45), unique=True, nullable=False)
+    hashed_password = Column(String(), nullable=False)
+    disabled = Column(Boolean, default=False)
