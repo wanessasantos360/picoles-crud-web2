@@ -100,3 +100,21 @@ class Picole_Schema(BaseModel):
     class Config:
         orm_mode = True
 
+class Usuario_Schema(BaseModel):
+    id: Optional[int]
+    username:str
+    email:str
+
+
+    class Config:
+        orm_mode = True
+
+class Cadastrar_Usuario_Schema(BaseModel):
+    id: Optional[int]
+    username:str
+    email:str
+    password:str
+
+
+    class Config:
+        orm_mode = True
