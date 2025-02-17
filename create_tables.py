@@ -1,10 +1,10 @@
 from core.db import engine
 from core.settings import ModelBase
+from models import all_models
 
 def create_tables():
     global engine
 
-    from models import models
     ModelBase.metadata.drop_all(engine)
     ModelBase.metadata.create_all(engine)
 
